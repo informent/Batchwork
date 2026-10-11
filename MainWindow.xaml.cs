@@ -40,7 +40,7 @@ public partial class MainWindow : Window
                 StatusText.Text = error ?? "Preview could not be created.";
                 return;
             }
-            PreviewList.ItemsSource = plan.Select(x => $"{Path.GetFileName(x.OriginalPath)}  →  {Path.GetFileName(x.ProposedPath)}").ToArray();
+            PreviewList.ItemsSource = plan.Select(x => $"{Path.GetFileName(x.OriginalPath)}  â†’  {Path.GetFileName(x.ProposedPath)}").ToArray();
             CountText.Text = $"{plan.Count:N0} files"; StatusText.Text = "Preview ready";
         }
         catch (Exception ex) { plan = Array.Empty<RenameItem>(); PreviewList.ItemsSource = Array.Empty<string>(); CountText.Text = "No valid preview"; StatusText.Text = ex.Message; }
@@ -51,7 +51,7 @@ public partial class MainWindow : Window
         try
         {
             journal.Prepare(plan); RenameEngine.Execute(plan); previous = journal.LoadUndoPlan();
-            StatusText.Text = $"Renamed {plan.Count:N0} files · undo survives restart"; RebuildPreview();
+            StatusText.Text = $"Renamed {plan.Count:N0} files Â· undo survives restart"; RebuildPreview();
         }
         catch (Exception ex) { StatusText.Text = ex.Message; }
     }
