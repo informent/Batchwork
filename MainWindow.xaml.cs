@@ -2,7 +2,7 @@ using System.IO;
 using System.Windows;
 using Forms = System.Windows.Forms;
 
-namespace OpenRename;
+namespace Batchwork;
 
 public partial class MainWindow : Window
 {

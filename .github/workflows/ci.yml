@@ -10,5 +10,18 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with: { dotnet-version: 10.0.x }
       - run: dotnet run --project tests/RenameEngineTests.csproj --nologo
-      - run: dotnet build OpenRename.csproj --configuration Release --nologo
+      - run: dotnet build Batchwork.csproj --configuration Release --nologo
       - run: pwsh -File tests/Test-Release.ps1
+      - name: Verify product branding
+        shell: pwsh
+        run: |
+          $exe = Join-Path $PWD 'test-output/Batchwork.exe'
+          $info = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($exe)
+          if ($info.ProductName -ne 'Batchwork' -or $info.FileDescription -ne 'Batchwork') { throw 'Executable product branding is incorrect' }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Batchwork-win-x64
+          path: |
+            test-output/*.exe
+            test-output/*.dll
+          if-no-files-found: error

@@ -18,13 +18,13 @@ jobs:
       - name: Run regression tests
         run: dotnet run --project tests/RenameEngineTests.csproj -c Release --nologo
       - name: Build
-        run: dotnet build OpenRename.csproj -c Release --nologo
+        run: dotnet build Batchwork.csproj -c Release --nologo
       - name: Publish self-contained executable
-        run: dotnet publish OpenRename.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -o release-output --nologo
+        run: dotnet publish Batchwork.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -o release-output --nologo
       - name: Smoke-test packaged application
         shell: pwsh
         run: |
-          $exe = Join-Path $PWD 'release-output/OpenRename.exe'
+          $exe = Join-Path $PWD 'release-output/Batchwork.exe'
           if (-not (Test-Path -LiteralPath $exe)) { throw 'Published executable is missing.' }
           $process = Start-Process -FilePath $exe -PassThru
           Start-Sleep -Seconds 3
@@ -33,11 +33,11 @@ jobs:
       - name: Create ZIP and checksum
         shell: pwsh
         run: |
-          $zip = Join-Path $PWD 'OpenRename-win-x64.zip'
-          Compress-Archive -Path 'release-output/OpenRename.exe' -DestinationPath $zip
+          $zip = Join-Path $PWD 'Batchwork-win-x64.zip'
+          Compress-Archive -Path 'release-output/Batchwork.exe' -DestinationPath $zip
           $hash = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$hash  OpenRename-win-x64.zip" | Set-Content -Encoding ascii SHA256SUMS.txt
+          "$hash  Batchwork-win-x64.zip" | Set-Content -Encoding ascii SHA256SUMS.txt
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$env:GITHUB_REF_NAME" OpenRename-win-x64.zip SHA256SUMS.txt --title "OpenRename $env:GITHUB_REF_NAME" --generate-notes
+        run: gh release create "$env:GITHUB_REF_NAME" Batchwork-win-x64.zip SHA256SUMS.txt --title "Batchwork $env:GITHUB_REF_NAME" --generate-notes
