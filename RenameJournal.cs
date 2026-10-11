@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text.Json;
 
-namespace OpenRename;
+namespace Batchwork;
 
 public sealed record RenameJournalEntry(DateTimeOffset CreatedUtc, IReadOnlyList<RenameItem> Items);
 

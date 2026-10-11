@@ -1,4 +1,4 @@
-using OpenRename;
+using Batchwork;
 var root = Path.Combine(Path.GetTempPath(), "openrename-" + Guid.NewGuid().ToString("N")); Directory.CreateDirectory(root); var a = Path.Combine(root, "draft-one.txt"); var b = Path.Combine(root, "draft-two.txt"); File.WriteAllText(a, "a"); File.WriteAllText(b, "b"); var plan = RenameEngine.Preview(new[] { a, b }, "draft", "final"); if (plan.Count != 2 || !Path.GetFileName(plan[0].ProposedPath).StartsWith("final")) throw new Exception("Preview failed.");
 if (!RenameEngine.TryPreview(new[] { a, b }, "draft", "final", out var validPreview, out _) || validPreview.Count != 2) throw new Exception("Valid preview was not accepted.");
 if (RenameEngine.TryPreview(new[] { a, b }, "", "invalid", out var invalidPreview, out var previewError) || invalidPreview.Count != 0 || string.IsNullOrWhiteSpace(previewError)) throw new Exception("Invalid preview retained executable rename operations.");

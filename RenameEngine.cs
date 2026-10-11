@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace OpenRename;
+namespace Batchwork;
 
 public sealed record RenameItem(string OriginalPath, string ProposedPath);
 
