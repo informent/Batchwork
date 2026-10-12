@@ -8,6 +8,12 @@ Version 1.1 persists the last rename transaction in an atomic local journal. Und
 
 Version 1.2 clears stale rename actions whenever a new preview is invalid, preventing a failed preview from leaving an older executable plan available to run. Regression tests cover a valid preview followed by an invalid one. Windows release builds run the engine tests, publish a self-contained executable, and smoke-test its launch before attaching the ZIP and SHA-256 file to the tagged release.
 
+## Verified undo in 1.4
+
+Restart recovery now supports file swaps and case-only renames. New journals record SHA-256 content evidence and the exact filename spelling, and flush the prepared record before moving files. Undo stops if a file has been edited, replaced, or the filesystem state is ambiguous. Existing version 1 journals retain ordinary rename recovery; new version 2 journals require this version or later.
+
+Preflight rejects Windows device names, trailing dots or spaces, folder collisions, linked files, and replacements that escape the original directory. File contents are read to verify identity, so preparing or recovering large batches may take longer. This is a last-operation undo journal, not a backup of file contents.
+
 MIT licensed.
 
 ## Name change
@@ -20,12 +26,12 @@ Existing settings and data locations retain the OpenRename folder name for compa
 
 Windows setup packages install Batchwork for your current account, bundle the .NET runtime, create a Start menu shortcut and register an uninstaller. A desktop shortcut is optional. No administrator password or manual file copying is required. Existing settings and saved data stay in their current locations. The portable ZIP remains available.
 
-Download `Batchwork-v1.3.1-setup.exe` from Releases and run it.
+Download `Batchwork-v1.4.0-setup.exe` from Releases and run it.
 
 For unattended deployment:
 
 ```powershell
-Start-Process .\Batchwork-v1.3.1-setup.exe -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-' -Wait -PassThru
+Start-Process .\Batchwork-v1.4.0-setup.exe -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-' -Wait -PassThru
 ```
 
 Build from source with the [open-source Inno Setup compiler](https://github.com/jrsoftware/issrc) installed:
