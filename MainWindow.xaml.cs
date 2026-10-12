@@ -50,7 +50,7 @@ public partial class MainWindow : Window
         if (plan.Count == 0) return;
         try
         {
-            journal.Prepare(plan); RenameEngine.Execute(plan); previous = journal.LoadUndoPlan();
+            journal.Prepare(plan); RenameEngine.Execute(plan); journal.Complete(); previous = journal.LoadUndoPlan();
             StatusText.Text = $"Renamed {plan.Count:N0} files · undo survives restart"; RebuildPreview();
         }
         catch (Exception ex) { StatusText.Text = ex.Message; }

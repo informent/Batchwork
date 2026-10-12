@@ -4,3 +4,5 @@ test-output/
 
 installer-payload/
 installer-output/
+
+downloaded-release-evidence.json
